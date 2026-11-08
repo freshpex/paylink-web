@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "buildCommand": "VITE_API_URL= npm run build",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://paylink-api-sepia.vercel.app/api/:path*"
+    },
+    {
+      "source": "/((?!api(?:/|$)).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

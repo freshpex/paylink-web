@@ -4,6 +4,35 @@ import { api, send, uploadMedia } from "../lib/api";
 import type { Company, Method } from "../lib/types";
 import { Alert, Button, Field } from "../components/ui";
 import { PaymentPreview } from "../components/PaymentPreview";
+
+const currencies = [
+  ["USD", "US Dollar"],
+  ["NGN", "Nigerian Naira"],
+  ["GBP", "British Pound"],
+  ["EUR", "Euro"],
+  ["SAR", "Saudi Riyal"],
+  ["CNY", "Chinese Yuan"],
+  ["AED", "UAE Dirham"],
+  ["AUD", "Australian Dollar"],
+  ["CAD", "Canadian Dollar"],
+  ["CHF", "Swiss Franc"],
+  ["HKD", "Hong Kong Dollar"],
+  ["INR", "Indian Rupee"],
+  ["KES", "Kenyan Shilling"],
+  ["ZAR", "South African Rand"],
+  ["SGD", "Singapore Dollar"],
+  ["NZD", "New Zealand Dollar"],
+  ["GHS", "Ghanaian Cedi"],
+  ["EGP", "Egyptian Pound"],
+  ["TRY", "Turkish Lira"],
+  ["MYR", "Malaysian Ringgit"],
+  ["PKR", "Pakistani Rupee"],
+  ["BDT", "Bangladeshi Taka"],
+  ["BRL", "Brazilian Real"],
+  ["MXN", "Mexican Peso"],
+  ["THB", "Thai Baht"],
+] as const;
+
 export function LinkEditor({
   company,
   onCancel,
@@ -113,8 +142,10 @@ export function LinkEditor({
                 value={draft.currency}
                 onChange={(e) => update("currency", e.target.value)}
               >
-                {["USD", "NGN", "GBP", "EUR"].map((c) => (
-                  <option key={c}>{c}</option>
+                {currencies.map(([code, name]) => (
+                  <option key={code} value={code}>
+                    {code} — {name}
+                  </option>
                 ))}
               </select>
             </Field>

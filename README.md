@@ -58,6 +58,14 @@ Receipt export libraries load only when needed. PDF/PNG export uses the approved
 
 ## Production hosting
 
+### Vercel
+
+The checked-in `vercel.json` forwards `/api/:path*` to the working API at `https://paylink-api-sepia.vercel.app/api/:path*` and serves the React app for client-side routes. Its build command clears `VITE_API_URL` so browser requests use the frontend's own `/api` path, even if an older project environment variable names another API host. This keeps session cookies on the frontend domain. Separate `*.vercel.app` projects are different sites for SameSite cookies; direct cross-site API calls do not support the current session policy.
+
+On the API project, set `FRONTEND_URL=https://paylink-web-rho.vercel.app` with no trailing slash and `COOKIE_SECURE=true`. Set `DATABASE_URL` to the pooled Neon URL and `DATABASE_URL_UNPOOLED` to the direct Neon URL for migrations. Redeploy the frontend after changing this configuration: Vite environment variables are compiled into its JavaScript, so editing a variable alone does not update an existing deployment. If the API hostname changes, update the proxy destination in `vercel.json` as well.
+
+After deploying, verify that an unauthenticated `https://paylink-web-rho.vercel.app/api/v1/auth/me` returns JSON with status `401`, rather than Vercel `NOT_FOUND` or the SPA HTML. Log in through the frontend to verify its session cookie. Payment and receipt links must also work on a direct page refresh.
+
 `npm run build` outputs `dist/`. Serve the assets with an SPA fallback to `index.html` for `/pay/:id` and `/receipt/:id`. Forward `/api` to the FastAPI service. A sample Nginx configuration and Dockerfile are included; the Nginx upstream is named `api:8000` and must be reachable on your container network. Add TLS at your edge.
 
 Vite variables are public and compiled into JavaScript. Mailjet and Cloudinary secrets belong only in the API environment. Public receipt URLs act as private access links and contain payer information; avoid third-party analytics and sharing them publicly.
