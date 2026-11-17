@@ -3,7 +3,9 @@ import { ArrowUpRight, Link2, Layers3, FileCheck2 } from "lucide-react";
 import { api, send } from "../lib/api";
 import type { User } from "../lib/types";
 import { Button, Field, Alert } from "../components/ui";
+import { useI18n } from "../lib/i18n";
 export function Auth({ onLogin }: { onLogin: (u: User) => void }) {
+  const { t } = useI18n();
   const [register, setRegister] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
@@ -32,56 +34,53 @@ export function Auth({ onLogin }: { onLogin: (u: User) => void }) {
           <span className="brand-mark">
             <Link2 />
           </span>{" "}
-          paylink<span className="tiny-tag">FOR BUSINESS</span>
+          paylink<span className="tiny-tag">{t("FOR BUSINESS")}</span>
         </div>
         <div>
-          <span className="eyebrow">A MORE PERSONAL WAY TO GET PAID</span>
+          <span className="eyebrow">{t("A MORE PERSONAL WAY TO GET PAID")}</span>
           <h1>
-            Your business.
+            {t("Your business.")}
             <br />
-            Your brand.
+            {t("Your brand.")}
             <br />
-            <em>Your payment link.</em>
+            <em>{t("Your payment link.")}</em>
           </h1>
-          <p>
-            Turn a simple request into a thoughtful payment experience. From the
-            first link to the final receipt.
-          </p>
+          <p>{t("Turn a simple request into a thoughtful payment experience. From the first link to the final receipt.")}</p>
           <div className="story-benefits">
             <span>
-              <Layers3 size={18} /> Every company, one workspace
+              <Layers3 size={18} /> {t("Every company, one workspace")}
             </span>
             <span>
-              <FileCheck2 size={18} /> Beautiful, branded receipts
+              <FileCheck2 size={18} /> {t("Beautiful, branded receipts")}
             </span>
           </div>
         </div>
-        <small>Made for the way you do business.</small>
+        <small>{t("Made for the way you do business.")}</small>
       </aside>
       <main className="auth-form">
         <div className="w-full max-w-sm">
           <span className="eyebrow text-indigo-600">
-            LET’S MAKE IT OFFICIAL
+            {t("LET’S MAKE IT OFFICIAL")}
           </span>
-          <h2>{register ? "Create your workspace" : "Welcome back."}</h2>
+          <h2>{t(register ? "Create your workspace" : "Welcome back.")}</h2>
           <p className="muted mb-8">
             {register
-              ? "A better payment experience starts here."
-              : "Your companies and payment links are right here."}
+              ? t("A better payment experience starts here.")
+              : t("Your companies and payment links are right here.")}
           </p>
           {error && <Alert>{error}</Alert>}
           <form onSubmit={submit} className="form-stack">
             {register && (
               <>
-                <Field label="Your name">
+                <Field label={t("Your name")}>
                   <input name="name" required autoComplete="name" />
                 </Field>
-                <Field label="Company name">
+                <Field label={t("Company name")}>
                   <input name="company_name" required maxLength={120} />
                 </Field>
               </>
             )}
-            <Field label="Email address">
+            <Field label={t("Email address")}>
               <input
                 name="email"
                 type="email"
@@ -91,8 +90,8 @@ export function Auth({ onLogin }: { onLogin: (u: User) => void }) {
               />
             </Field>
             <Field
-              label="Password"
-              hint={register ? "Use at least 12 characters." : undefined}
+              label={t("Password")}
+              hint={register ? t("Use at least 12 characters.") : undefined}
             >
               <input
                 name="password"
@@ -104,12 +103,12 @@ export function Auth({ onLogin }: { onLogin: (u: User) => void }) {
               />
             </Field>
             <Button busy={busy} type="submit">
-              {register ? "Create workspace" : "Sign in"}{" "}
+              {t(register ? "Create workspace" : "Sign in")}{" "}
               <ArrowUpRight size={17} />
             </Button>
           </form>
           <p className="mt-6 text-sm muted">
-            {register ? "Already have a workspace?" : "New to Paylink?"}{" "}
+            {t(register ? "Already have a workspace?" : "New to Paylink?")}{" "}
             <button
               className="text-indigo-600 font-semibold"
               onClick={() => {
@@ -117,7 +116,7 @@ export function Auth({ onLogin }: { onLogin: (u: User) => void }) {
                 setError("");
               }}
             >
-              {register ? "Sign in" : "Create an account"}
+              {t(register ? "Sign in" : "Create an account")}
             </button>
           </p>
         </div>

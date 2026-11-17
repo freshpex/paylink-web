@@ -4,6 +4,7 @@ import { api, send, uploadMedia } from "../lib/api";
 import type { Company, Method } from "../lib/types";
 import { Alert, Button, Field } from "../components/ui";
 import { PaymentPreview } from "../components/PaymentPreview";
+import { useI18n } from "../lib/i18n";
 
 const currencies = [
   ["USD", "US Dollar"],
@@ -42,6 +43,7 @@ export function LinkEditor({
   onCancel: () => void;
   onCreated: () => void;
 }) {
+  const { t } = useI18n();
   const [draft, setDraft] = useState({
     title: "",
     description: "",
@@ -53,8 +55,8 @@ export function LinkEditor({
     recipient_name: "",
     recipient_email: "",
     note: "",
-    receipt_heading: "Payment receipt",
-    receipt_footer: "Thank you for your payment. We appreciate your business.",
+    receipt_heading: t("Payment receipt"),
+    receipt_footer: t("Thank you for your payment. We appreciate your business."),
   });
   const [amount, setAmount] = useState(""),
     [methods, setMethods] = useState<Method[]>([
@@ -96,37 +98,37 @@ export function LinkEditor({
     <>
       <div className="page-heading">
         <div>
-          <span className="eyebrow">MAKE IT PERSONAL</span>
-          <h1>Create a payment link</h1>
-          <p>Your details. Your branding. Ready to share.</p>
+          <span className="eyebrow">{t("MAKE IT PERSONAL")}</span>
+          <h1>{t("Create a payment link")}</h1>
+          <p>{t("Your details. Your branding. Ready to share.")}</p>
         </div>
         <Button variant="secondary" onClick={onCancel}>
-          Cancel
+          {t("Cancel")}
         </Button>
       </div>
       <div className="editor-layout">
         <form className="data-panel editor-form form-stack" onSubmit={submit}>
           {error && <Alert>{error}</Alert>}
-          <h3>01 · The payment</h3>
-          <Field label="Payment title">
+          <h3>01 · {t("PAYMENT")}</h3>
+          <Field label={t("Payment title")}>
             <input
               required
               maxLength={160}
               value={draft.title}
               onChange={(e) => update("title", e.target.value)}
-              placeholder="Spring semester tuition"
+              placeholder={t("Spring semester tuition")}
             />
           </Field>
-          <Field label="Description">
+          <Field label={t("Description")}>
             <textarea
               maxLength={3000}
               value={draft.description}
               onChange={(e) => update("description", e.target.value)}
-              placeholder="Tell your customer what this payment is for."
+              placeholder={t("Tell your customer what this payment is for.")}
             />
           </Field>
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Amount">
+            <Field label={t("Amount")}>
               <input
                 required
                 type="number"
@@ -137,7 +139,7 @@ export function LinkEditor({
                 onChange={(e) => setAmount(e.target.value)}
               />
             </Field>
-            <Field label="Currency">
+            <Field label={t("Currency")}>
               <select
                 value={draft.currency}
                 onChange={(e) => update("currency", e.target.value)}
@@ -150,7 +152,7 @@ export function LinkEditor({
               </select>
             </Field>
           </div>
-          <Field label="Payment category">
+          <Field label={t("Payment category")}>
             <select
               value={draft.category}
               onChange={(e) => update("category", e.target.value)}
@@ -163,14 +165,14 @@ export function LinkEditor({
             </select>
           </Field>
           <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="Recipient name (private, optional)">
+            <Field label={t("Recipient name (private, optional)")}>
               <input
                 maxLength={120}
                 value={draft.recipient_name}
                 onChange={(e) => update("recipient_name", e.target.value)}
               />
             </Field>
-            <Field label="Recipient email (private, optional)">
+            <Field label={t("Recipient email (private, optional)")}>
               <input
                 type="email"
                 value={draft.recipient_email}
@@ -179,19 +181,18 @@ export function LinkEditor({
             </Field>
           </div>
           <hr />
-          <h3>02 · Ways to pay</h3>
+          <h3>02 · {t("Ways to pay")}</h3>
           <p className="muted text-sm">
-            List only methods your company can receive. Enter the exact account,
-            wallet, email, network, or transfer instructions the customer needs.
+            {t("List only methods your company can receive. Enter the exact account, wallet, email, network, or transfer instructions the customer needs.")}
           </p>
           {methods.map((m, i) => (
             <div className="method-editor" key={i}>
               <div className="flex justify-between items-center mb-3">
-                <strong>Method {i + 1}</strong>
+                <strong>{t("Method")} {i + 1}</strong>
                 {methods.length > 1 && (
                   <button
                     type="button"
-                    aria-label="Remove payment method"
+                    aria-label={t("Remove payment method")}
                     onClick={() =>
                       setMethods(methods.filter((_, n) => n !== i))
                     }
@@ -200,7 +201,7 @@ export function LinkEditor({
                   </button>
                 )}
               </div>
-              <Field label="Method name">
+              <Field label={t("Method name")}>
                 <input
                   required
                   maxLength={80}
@@ -215,7 +216,7 @@ export function LinkEditor({
                   }
                 />
               </Field>
-              <Field label="Payment destination & instructions">
+              <Field label={t("Payment destination & instructions")}>
                 <textarea
                   required
                   maxLength={3000}
@@ -228,7 +229,7 @@ export function LinkEditor({
                       ),
                     )
                   }
-                  placeholder="Account name, bank, IBAN / SWIFT, PayPal email, or crypto address and network…"
+                  placeholder={t("Account name, bank, IBAN / SWIFT, PayPal email, or crypto address and network…")}
                 />
               </Field>
             </div>
@@ -251,11 +252,11 @@ export function LinkEditor({
             disabled={methods.length >= 10}
             onClick={() => setMethods([...methods, { label: "", details: "" }])}
           >
-            <Plus size={15} /> Add a payment method
+            <Plus size={15} /> {t("Add a payment method")}
           </Button>
           <hr />
-          <h3>03 · Make it yours</h3>
-          <Field label="Page style">
+          <h3>03 · {t("Make it yours")}</h3>
+          <Field label={t("Page style")}>
             <select
               value={draft.theme}
               onChange={(e) => update("theme", e.target.value)}
@@ -266,8 +267,8 @@ export function LinkEditor({
             </select>
           </Field>
           <Field
-            label="Cover image or video"
-            hint="Cloudinary upload · up to 20 MB"
+            label={t("Cover image or video")}
+            hint={t("Cloudinary upload · up to 20 MB")}
           >
             <input
               type="file"
@@ -293,18 +294,18 @@ export function LinkEditor({
               className="text-button"
               onClick={() => update("hero_url", "")}
             >
-              Remove cover
+              {t("Remove cover")}
             </button>
           )}
-          <Field label="Additional notes or terms">
+          <Field label={t("Additional notes or terms")}>
             <textarea
               maxLength={1000}
               value={draft.note}
               onChange={(e) => update("note", e.target.value)}
-              placeholder="Due dates, transfer fees, or important information."
+              placeholder={t("Due dates, transfer fees, or important information.")}
             />
           </Field>
-          <Field label="Receipt heading">
+          <Field label={t("Receipt heading")}>
             <input
               required
               maxLength={100}
@@ -312,7 +313,7 @@ export function LinkEditor({
               onChange={(e) => update("receipt_heading", e.target.value)}
             />
           </Field>
-          <Field label="Receipt message">
+          <Field label={t("Receipt message")}>
             <textarea
               maxLength={1000}
               value={draft.receipt_footer}
@@ -320,13 +321,13 @@ export function LinkEditor({
             />
           </Field>
           <Button type="submit" busy={busy} disabled={uploading}>
-            Save & create link <ArrowUpRight size={17} />
+            {t("Save & create link")} <ArrowUpRight size={17} />
           </Button>
         </form>
         <aside className="preview-column">
-          <span className="eyebrow">LIVE PREVIEW</span>
+          <span className="eyebrow">{t("LIVE PREVIEW")}</span>
           <p className="muted text-sm mb-5">
-            A little preview of a great first impression.
+            {t("A little preview of a great first impression.")}
           </p>
           <PaymentPreview
             company={company}
@@ -335,7 +336,7 @@ export function LinkEditor({
             <div className="preview-method mt-6">
               {methods.map((m, i) => (
                 <div key={i}>
-                  {m.label || "Payment method"} <ArrowRight size={14} />
+                  {m.label || t("Payment method")} <ArrowRight size={14} />
                 </div>
               ))}
             </div>

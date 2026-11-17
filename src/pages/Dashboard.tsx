@@ -24,6 +24,7 @@ import {
 import { Alert, Button, CopyButton, Empty, Status } from "../components/ui";
 import { LinkEditor } from "./LinkEditor";
 import { CompanySettings } from "./CompanySettings";
+import { localizedPath, useI18n } from "../lib/i18n";
 type Tab = "overview" | "links" | "payments" | "settings" | "create";
 export function Dashboard({
   user,
@@ -32,6 +33,7 @@ export function Dashboard({
   user: User;
   onLogout: () => void;
 }) {
+  const { t, locale } = useI18n();
   const [companies, setCompanies] = useState<Company[]>([]),
     [cid, setCid] = useState(""),
     [tab, setTab] = useState<Tab>("overview"),
@@ -111,7 +113,7 @@ export function Dashboard({
     <div className="app-layout">
       <button
         className="mobile-menu"
-        aria-label="Toggle navigation"
+        aria-label={t("Toggle navigation")}
         onClick={() => setMobile(!mobile)}
       >
         <Menu />
@@ -121,12 +123,12 @@ export function Dashboard({
           <span className="brand-mark">
             <Link2 size={21} />
           </span>
-          paylink<span className="tiny-tag">BUSINESS</span>
+          paylink<span className="tiny-tag">{t("BUSINESS")}</span>
         </div>
         <div className="workspace-select">
-          <small>YOUR WORKSPACE</small>
+          <small>{t("YOUR WORKSPACE")}</small>
           <select
-            aria-label="Select company"
+            aria-label={t("Select company")}
             value={cid}
             onChange={(e) => {
               setReviewing(undefined);
@@ -144,10 +146,10 @@ export function Dashboard({
         <nav>
           {(
             [
-              ["overview", LayoutDashboard, "Overview"],
-              ["links", Link2, "Payment links"],
-              ["payments", Wallet, "Payments"],
-              ["settings", Settings2, "Company settings"],
+              ["overview", LayoutDashboard, t("Overview")],
+              ["links", Link2, t("Payment links")],
+              ["payments", Wallet, t("Payments")],
+              ["settings", Settings2, t("Company settings")],
             ] as const
           ).map(([key, Icon, label]) => (
             <button
@@ -165,10 +167,10 @@ export function Dashboard({
         </nav>
         <div className="sidebar-tip">
           <span className="little-star">✧</span>
-          <strong>A link that looks like you.</strong>
-          <p>Add your logo and colors to make every payment feel personal.</p>
+          <strong>{t("A link that looks like you.")}</strong>
+          <p>{t("Add your logo and colors to make every payment feel personal.")}</p>
           <button onClick={() => navigate("settings")}>
-            Make it yours <ArrowRight size={14} />
+            {t("Make it yours")} <ArrowRight size={14} />
           </button>
         </div>
         <div className="sidebar-user">
@@ -178,7 +180,7 @@ export function Dashboard({
             <small>{user.email}</small>
           </div>
           <button
-            aria-label="Sign out"
+            aria-label={t("Sign out")}
             onClick={async () => {
               await api("/auth/logout", send("POST", {}));
               onLogout();
@@ -191,11 +193,11 @@ export function Dashboard({
       <div className="main-area">
         <header className="topbar">
           <span>
-            Workspace <span className="mx-3 text-slate-300">/</span>
+            {t("Workspace")} <span className="mx-3 text-slate-300">/</span>
             <b>{company?.name}</b>
           </span>
           <span className="topbar-right">
-            <span className="live-dot" /> Your business, connected
+            <span className="live-dot" /> {t("Your business, connected")}
           </span>
         </header>
         <main className="dashboard-main">
@@ -223,60 +225,59 @@ export function Dashboard({
                 <div>
                   <span className="eyebrow">
                     {tab === "overview"
-                      ? "YOUR BUSINESS AT A GLANCE"
-                      : "YOUR WORKSPACE"}
+                      ? t("YOUR BUSINESS AT A GLANCE")
+                      : t("YOUR WORKSPACE")}
                   </span>
                   <h1>
                     {tab === "overview"
-                      ? `Good to see you, ${user.name.split(" ")[0]}.`
+                      ? `${t("Good to see you,")} ${user.name.split(" ")[0]}.`
                       : tab === "links"
-                        ? "Payment links"
-                        : "Payments"}
+                        ? t("Payment links")
+                        : t("Payments")}
                   </h1>
                   <p>
                     {tab === "overview"
-                      ? "A little less chasing. A lot more getting paid."
+                      ? t("A little less chasing. A lot more getting paid.")
                       : tab === "links"
-                        ? "Thoughtful payment experiences, one link at a time."
-                        : "Review reports and confirm funds in your own account."}
+                        ? t("Thoughtful payment experiences, one link at a time.")
+                        : t("Review reports and confirm funds in your own account.")}
                   </p>
                 </div>
                 <Button onClick={() => navigate("create")}>
-                  <Plus size={17} /> Create payment link
+                  <Plus size={17} /> {t("Create payment link")}
                 </Button>
               </div>
               {tab === "overview" && (
                 <>
                   <div className="welcome-banner">
                     <div>
-                      <span className="eyebrow">LOOK GOOD. GET PAID.</span>
-                      <h2>One link. Your whole brand.</h2>
+                      <span className="eyebrow">{t("LOOK GOOD. GET PAID.")}</span>
+                      <h2>{t("One link. Your whole brand.")}</h2>
                       <p>
-                        Make your next payment request feel like a personal
-                        invitation.
+                        {t("Make your next payment request feel like a personal invitation.")}
                       </p>
                       <button onClick={() => navigate("create")}>
-                        Create your first link <ArrowUpRight size={16} />
+                        {t("Create your first link")} <ArrowUpRight size={16} />
                       </button>
                     </div>
                     <div className="banner-art">
                       <div className="art-orbit" />
                       <div className="mini-link">
                         <Link2 size={24} />
-                        <span>Made for your business</span>
+                        <span>{t("Made for your business")}</span>
                         <b>
-                          Ready to share <ArrowUpRight size={15} />
+                          {t("Ready to share")} <ArrowUpRight size={15} />
                         </b>
                       </div>
                       <div className="art-chip">
-                        <CheckCircle2 size={17} /> Beautifully simple
+                        <CheckCircle2 size={17} /> {t("Beautifully simple")}
                       </div>
                     </div>
                   </div>
                   <div className="stats-grid">
                     <div>
                       <span>
-                        <Wallet size={17} /> Confirmed payments
+                        <Wallet size={17} /> {t("Confirmed payments")}
                       </span>
                       <h2>
                         {Object.entries(totals).map(([cur, n]) => (
@@ -287,22 +288,22 @@ export function Dashboard({
                         {!Object.keys(totals).length && "—"}
                       </h2>
                       <small>
-                        Company-confirmed funds · latest 200 reports
+                        {t("Company-confirmed funds · latest 200 reports")}
                       </small>
                     </div>
                     <div>
                       <span>
-                        <Clock3 size={17} /> Awaiting review
+                        <Clock3 size={17} /> {t("Awaiting review")}
                       </span>
                       <h2>{pending.length}</h2>
-                      <small>Payment reports to check</small>
+                      <small>{t("Payment reports to check")}</small>
                     </div>
                     <div>
                       <span>
-                        <Link2 size={17} /> Active payment links
+                        <Link2 size={17} /> {t("Active payment links")}
                       </span>
                       <h2>{links.filter((l) => l.active).length}</h2>
-                      <small>Ready for your customers · latest 200 links</small>
+                      <small>{t("Ready for your customers · latest 200 links")}</small>
                     </div>
                   </div>
                 </>
@@ -313,37 +314,37 @@ export function Dashboard({
                     <div>
                       <h3>
                         {tab === "overview"
-                          ? "Your latest payment links"
-                          : "All payment links"}
+                          ? t("Your latest payment links")
+                          : t("All payment links")}
                       </h3>
-                      <p>Ready when your customers are.</p>
+                      <p>{t("Ready when your customers are.")}</p>
                     </div>
                     {tab === "overview" && (
                       <button
                         className="text-button"
                         onClick={() => navigate("links")}
                       >
-                        View all links <ArrowRight size={14} />
+                        {t("View all links")} <ArrowRight size={14} />
                       </button>
                     )}
                   </div>
                   {loading ? (
-                    <p className="p-8 muted">Loading links…</p>
+                    <p className="p-8 muted">{t("Loading links…")}</p>
                   ) : !links.length ? (
-                    <Empty title="Your first link starts here">
-                      Create a branded payment request and share it with anyone.
+                    <Empty title={t("Your first link starts here")}>
+                      {t("Create a branded payment request and share it with anyone.")}
                     </Empty>
                   ) : (
                     <div className="table-scroll">
                       <table>
                         <thead>
                           <tr>
-                            <th>Payment link</th>
-                            <th>Amount</th>
-                            <th>Status</th>
-                            <th>Created</th>
+                            <th>{t("Payment link")}</th>
+                            <th>{t("Amount")}</th>
+                            <th>{t("Status")}</th>
+                            <th>{t("Created")}</th>
                             <th>
-                              <span className="sr-only">Actions</span>
+                              <span className="sr-only">{t("Actions")}</span>
                             </th>
                           </tr>
                         </thead>
@@ -353,7 +354,7 @@ export function Dashboard({
                               <td>
                                 <Link
                                   className="row-title"
-                                  to={`/pay/${l.id}`}
+                                  to={localizedPath(`/pay/${l.id}`, locale)}
                                   target="_blank"
                                 >
                                   {l.title}
@@ -375,7 +376,7 @@ export function Dashboard({
                               <td>
                                 <div className="flex gap-2 items-center">
                                   <CopyButton
-                                    value={`${location.origin}/pay/${l.id}`}
+                                    value={`${location.origin}${localizedPath(`/pay/${l.id}`, locale)}`}
                                   />
                                   <button
                                     className="text-button"
@@ -391,7 +392,7 @@ export function Dashboard({
                                       }
                                     }}
                                   >
-                                    {l.active ? "Pause" : "Activate"}
+                                    {l.active ? t("Pause") : t("Activate")}
                                   </button>
                                 </div>
                               </td>
@@ -407,30 +408,29 @@ export function Dashboard({
                 <section className="data-panel">
                   <div className="panel-heading">
                     <div>
-                      <h3>Payment reports</h3>
+                      <h3>{t("Payment reports")}</h3>
                       <p>
-                        Confirm only after checking that funds arrived in your
-                        account.
+                        {t("Confirm only after checking that funds arrived in your account.")}
                       </p>
                     </div>
                     <Button variant="secondary" onClick={refresh}>
-                      Refresh
+                      {t("Refresh")}
                     </Button>
                   </div>
                   {!payments.length ? (
-                    <Empty title="Nothing to review just yet">
-                      Customer payment reports will appear here.
+                    <Empty title={t("Nothing to review just yet")}>
+                      {t("Customer payment reports will appear here.")}
                     </Empty>
                   ) : (
                     <div className="table-scroll">
                       <table>
                         <thead>
                           <tr>
-                            <th>Customer</th>
-                            <th>Amount</th>
-                            <th>Method</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>{t("Customer")}</th>
+                            <th>{t("Amount")}</th>
+                            <th>{t("Method")}</th>
+                            <th>{t("Status")}</th>
+                            <th>{t("Action")}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -451,15 +451,15 @@ export function Dashboard({
                                     variant="secondary"
                                     onClick={() => setReviewing(p)}
                                   >
-                                    Review
+                                    {t("Review")}
                                   </Button>
                                 ) : p.status === "paid" ? (
                                   <Link
                                     className="text-button"
-                                    to={`/receipt/${p.id}`}
+                                    to={localizedPath(`/receipt/${p.id}`, locale)}
                                     target="_blank"
                                   >
-                                    Receipt <ArrowUpRight size={14} />
+                                    {t("Receipt")} <ArrowUpRight size={14} />
                                   </Link>
                                 ) : (
                                   "—"
@@ -474,8 +474,8 @@ export function Dashboard({
                 </section>
               )}
               <footer className="dashboard-footer">
-                <span>Good business starts with a little trust.</span>
-                <span>Made personal with paylink</span>
+                <span>{t("Good business starts with a little trust.")}</span>
+                <span>{t("Made personal with paylink")}</span>
               </footer>
             </>
           )}
@@ -484,45 +484,44 @@ export function Dashboard({
               <section
                 role="dialog"
                 aria-modal="true"
-                aria-label="Review payment"
+                aria-label={t("Review payment")}
                 className="modal"
               >
-                <span className="eyebrow">PAYMENT REVIEW</span>
-                <h2>Have the funds arrived?</h2>
+                <span className="eyebrow">{t("PAYMENT REVIEW")}</span>
+                <h2>{t("Have the funds arrived?")}</h2>
                 <p>
-                  Check your bank, wallet, or payment account before confirming.
-                  This creates the customer’s official receipt.
+                  {t("Check your bank, wallet, or payment account before confirming. This creates the customer’s official receipt.")}
                 </p>
                 <dl className="review-details">
-                  <dt>Customer</dt>
+                  <dt>{t("Customer")}</dt>
                   <dd>
                     {reviewing.name} · {reviewing.email}
                   </dd>
-                  <dt>Amount</dt>
+                  <dt>{t("Amount")}</dt>
                   <dd>{money(reviewing.amount, reviewing.currency)}</dd>
-                  <dt>Method</dt>
+                  <dt>{t("Method")}</dt>
                   <dd>{reviewing.provider}</dd>
-                  <dt>Transfer reference</dt>
-                  <dd>{reviewing.transfer_reference || "Not supplied"}</dd>
+                  <dt>{t("Transfer reference")}</dt>
+                  <dd>{reviewing.transfer_reference || t("Not supplied")}</dd>
                 </dl>
                 {error && <Alert>{error}</Alert>}
                 <div className="flex flex-wrap gap-2">
                   <Button busy={busy} onClick={() => review("paid")}>
-                    Confirm funds received
+                    {t("Confirm funds received")}
                   </Button>
                   <Button
                     busy={busy}
                     variant="danger"
                     onClick={() => review("rejected")}
                   >
-                    Reject report
+                    {t("Reject report")}
                   </Button>
                   <Button
                     disabled={busy}
                     variant="secondary"
                     onClick={() => setReviewing(undefined)}
                   >
-                    Cancel
+                    {t("Cancel")}
                   </Button>
                 </div>
               </section>

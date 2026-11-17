@@ -4,7 +4,9 @@ import { Download, FileImage, CheckCircle2 } from "lucide-react";
 import { api } from "../lib/api";
 import { money, type Receipt as ReceiptData } from "../lib/types";
 import { Alert, Brand, Button } from "../components/ui";
+import { useI18n } from "../lib/i18n";
 export function Receipt() {
+  const { t } = useI18n();
   const { id } = useParams();
   const [data, setData] = useState<ReceiptData>(),
     [error, setError] = useState(""),
@@ -51,7 +53,7 @@ export function Receipt() {
         a.click();
       }
     } catch {
-      setError("Could not export the receipt. Please try again.");
+      setError(t("Could not export the receipt. Please try again."));
     } finally {
       setBusy(false);
     }
@@ -63,8 +65,8 @@ export function Receipt() {
         <>
           <div className="receipt-toolbar">
             <div>
-              <span className="eyebrow">YOURS TO KEEP</span>
-              <h2>A little proof. A lot of peace of mind.</h2>
+              <span className="eyebrow">{t("YOURS TO KEEP")}</span>
+              <h2>{t("A little proof. A lot of peace of mind.")}</h2>
             </div>
             <div className="flex gap-2">
               <Button
@@ -72,10 +74,10 @@ export function Receipt() {
                 variant="secondary"
                 onClick={() => download(false)}
               >
-                <FileImage size={16} /> Image
+                <FileImage size={16} /> {t("Image")}
               </Button>
               <Button busy={busy} onClick={() => download(true)}>
-                <Download size={16} /> PDF
+                <Download size={16} /> {t("PDF")}
               </Button>
             </div>
           </div>
@@ -87,7 +89,7 @@ export function Receipt() {
             <div className="receipt-top">
               <Brand name={data.company} logo={data.logo_url} />
               <span className="receipt-confirmed">
-                <CheckCircle2 size={15} /> Confirmed by company
+                <CheckCircle2 size={15} /> {t("Confirmed by company")}
               </span>
             </div>
             <span className="eyebrow mt-12 block">{data.heading}</span>
@@ -96,35 +98,35 @@ export function Receipt() {
             <hr />
             <div className="receipt-grid">
               <div>
-                <small>RECEIVED FROM</small>
+                <small>{t("RECEIVED FROM")}</small>
                 <strong>{data.payer}</strong>
                 <span>{data.email}</span>
               </div>
               <div>
-                <small>PAYMENT METHOD</small>
+                <small>{t("PAYMENT METHOD")}</small>
                 <strong>{data.method}</strong>
               </div>
               <div>
-                <small>CONFIRMED ON</small>
+                <small>{t("CONFIRMED ON")}</small>
                 <strong>{new Date(data.confirmed_at).toLocaleString()}</strong>
               </div>
               <div>
-                <small>TRANSFER REFERENCE</small>
-                <strong>{data.reference || "Not supplied"}</strong>
+                <small>{t("TRANSFER REFERENCE")}</small>
+                <strong>{data.reference || t("Not supplied")}</strong>
               </div>
             </div>
             <div className="receipt-id">
-              <small>RECEIPT NUMBER</small>
+              <small>{t("RECEIPT NUMBER")}</small>
               <p>{data.id}</p>
             </div>
             <p className="whitespace-pre-wrap receipt-footer">{data.footer}</p>
             <small className="muted">
-              Issued by {data.company} following manual confirmation of funds.
+              {t("Issued by")} {data.company} {t("following confirmation of funds.")}
             </small>
           </div>
         </>
       ) : (
-        !error && <p>Loading receipt…</p>
+        !error && <p>{t("Loading receipt…")}</p>
       )}
     </main>
   );

@@ -1,5 +1,6 @@
 import { useState, type ReactNode, type ButtonHTMLAttributes } from "react";
 import { Copy, Check, LoaderCircle, ArrowUpRight } from "lucide-react";
+import { useI18n } from "../lib/i18n";
 export function Button({
   children,
   busy = false,
@@ -66,6 +67,7 @@ export function CopyButton({
   value: string;
   label?: string;
 }) {
+  const { t } = useI18n();
   const [done, setDone] = useState(false);
   const [error, setError] = useState(false);
   return (
@@ -83,11 +85,11 @@ export function CopyButton({
         }}
       >
         {done ? <Check size={14} /> : <Copy size={14} />}{" "}
-        {done ? "Copied" : label}
+        {done ? t("Copied") : t(label)}
       </button>
       {error && (
         <input
-          aria-label="Copy this link manually"
+          aria-label={t("Copy this link manually")}
           readOnly
           value={value}
           onFocus={(e) => e.target.select()}
@@ -109,17 +111,18 @@ export function Brand({ name, logo }: { name: string; logo?: string | null }) {
   );
 }
 export function Status({ status }: { status: string }) {
+  const { t } = useI18n();
   return (
     <span className={`badge ${status}`}>
       {status === "paid"
-        ? "Confirmed"
+        ? t("Confirmed")
         : status === "pending"
-          ? "Awaiting review"
+          ? t("Awaiting review")
           : status === "active"
-            ? "Active"
+            ? t("Active")
             : status === "inactive"
-              ? "Paused"
-              : "Rejected"}
+              ? t("Paused")
+              : t("Rejected")}
     </span>
   );
 }

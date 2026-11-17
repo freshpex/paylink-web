@@ -3,6 +3,7 @@ import { Building2, ImagePlus } from "lucide-react";
 import { api, send, uploadMedia } from "../lib/api";
 import type { Company } from "../lib/types";
 import { Alert, Brand, Button, Field } from "../components/ui";
+import { useI18n } from "../lib/i18n";
 export function CompanySettings({
   company,
   onSaved,
@@ -10,6 +11,7 @@ export function CompanySettings({
   company: Company;
   onSaved: (c: Company) => void;
 }) {
+  const { t } = useI18n();
   const [name, setName] = useState(company.name),
     [accent, setAccent] = useState(company.accent),
     [logo, setLogo] = useState(company.logo_url || ""),
@@ -51,9 +53,9 @@ export function CompanySettings({
     <>
       <div className="page-heading">
         <div>
-          <span className="eyebrow">A BRAND THEY RECOGNIZE</span>
-          <h1>Company settings</h1>
-          <p>The details that make your payment page feel like you.</p>
+          <span className="eyebrow">{t("A BRAND THEY RECOGNIZE")}</span>
+          <h1>{t("Company settings")}</h1>
+          <p>{t("The details that make your payment page feel like you.")}</p>
         </div>
         <Button
           variant="secondary"
@@ -65,18 +67,18 @@ export function CompanySettings({
           }}
         >
           <Building2 size={16} />
-          {adding ? "Cancel new company" : "Add another company"}
+          {t(adding ? "Cancel new company" : "Add another company")}
         </Button>
       </div>
       <form onSubmit={save} className="data-panel settings-form form-stack">
         {error && <Alert>{error}</Alert>}
         {saved && (
           <p role="status" className="success-note">
-            Company saved successfully.
+            {t("Company saved successfully.")}
           </p>
         )}
-        <h3>{adding ? "New company" : "Your brand"}</h3>
-        <Field label="Company name">
+        <h3>{t(adding ? "New company" : "Your brand")}</h3>
+        <Field label={t("Company name")}>
           <input
             required
             maxLength={120}
@@ -89,7 +91,7 @@ export function CompanySettings({
         <div className="brand-setting">
           <Brand name={(adding ? newName : name) || "Company"} logo={logo} />
           <label className="upload-label">
-            <ImagePlus size={16} /> Upload logo
+            <ImagePlus size={16} /> {t("Upload logo")}
             <input
               className="sr-only"
               type="file"
@@ -116,10 +118,10 @@ export function CompanySettings({
             className="text-button"
             onClick={() => setLogo("")}
           >
-            Remove logo
+            {t("Remove logo")}
           </button>
         )}
-        <Field label="Brand color">
+        <Field label={t("Brand color")}>
           <div className="flex gap-3 items-center">
             <input
               className="color-input"
@@ -131,10 +133,9 @@ export function CompanySettings({
           </div>
         </Field>
         <p className="muted text-sm">
-          Branding is used on payment pages. Confirmed receipts keep a snapshot
-          of the brand and payment details at the time of approval.
+          {t("Branding is used on payment pages. Confirmed receipts keep a snapshot of the brand and payment details at the time of approval.")}
         </p>
-        <Button busy={busy}>Save company</Button>
+        <Button busy={busy}>{t("Save company")}</Button>
       </form>
     </>
   );

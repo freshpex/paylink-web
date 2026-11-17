@@ -1,6 +1,7 @@
 import type { PaymentLink, Company } from "../lib/types";
 import { money } from "../lib/types";
 import { Brand } from "./ui";
+import { useI18n } from "../lib/i18n";
 export function PaymentPreview({
   link,
   company,
@@ -10,6 +11,7 @@ export function PaymentPreview({
   company: Company;
   children?: React.ReactNode;
 }) {
+  const { t } = useI18n();
   return (
     <article
       className={`payment-card theme-${link.theme || "classic"}`}
@@ -22,21 +24,21 @@ export function PaymentPreview({
           <img
             className="payment-hero"
             src={link.hero_url}
-            alt="Company payment page banner"
+            alt={t("Company payment page banner")}
           />
         ))}
       <div className="payment-content">
         <Brand name={company.name} logo={company.logo_url} />
         <div className="mt-10">
-          <span className="eyebrow">{link.category || "PAYMENT"} PAYMENT</span>
-          <h1>{link.title || "Your payment title"}</h1>
+          <span className="eyebrow">{link.category || t("PAYMENT")} {t("PAYMENT")}</span>
+          <h1>{link.title || t("Your payment title")}</h1>
           <p className="muted whitespace-pre-wrap">
             {link.description ||
-              "A personal payment experience, made for your customer."}
+              t("A personal payment experience, made for your customer.")}
           </p>
         </div>
         <div className="amount-box">
-          <span>Total amount</span>
+          <span>{t("Total amount")}</span>
           <strong>{money(link.amount || 0, link.currency || "USD")}</strong>
         </div>
         {link.note && <p className="note whitespace-pre-wrap">{link.note}</p>}
